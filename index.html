@@ -129,13 +129,13 @@
                             <h5>Give</h5>
                         </div>
                         <div class="col-2">
-                            <h5>Value</h5>
+                            <h5 class="text-center">Value</h5>
                         </div>
                         <div class="col-4">
                             <h5>Receive</h5>
                         </div>
                         <div class="col-2">
-                            <h5>Value</h5>
+                            <h5 class="text-center">Value</h5>
                         </div>
                     </div>
                     <!-- Player Forms will be injected here -->
@@ -165,13 +165,13 @@
                                 <input class="typeahead form-control" type="text" placeholder="Player ${i}">
                             </div>
                             <div class="player-give-value col-2">
-                                <span>0.0</span>
+                                <div class="text-center">0.0</div>
                             </div>
                             <div class="player-receive-name col-4">
                                 <input class="typeahead form-control" type="text" placeholder="Player ${i}">
                             </div>
                             <div class="player-receive-value col-2">
-                                <span>0.0</span>
+                                <div class="text-center">0.0</div>
                             </div>
                         </div>
                     `;
@@ -180,7 +180,7 @@
             createDifferenceDisplay = (valueDifference) => {
                 return `
                     <div class="col-3 alert">
-                        <strong>Trade Value Difference:</strong> ${valueDifference}%
+                        <strong>Trade Value Difference:</strong> ${valueDifference}
                     </div>
                     <div class="col-9 alert" style="${valueDifference == 0 ? 'display: none':''}">
                         <strong>Recommendation:</strong> ${determineRecommendationText(valueDifference)}
