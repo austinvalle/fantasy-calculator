@@ -153,7 +153,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
     <script>
         $(() => {
-            var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1zji_TVNozz6_fIgPd1qCmKL62mxEJXsdGUU3Tj3BPcE/edit?usp=sharing';
+            var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1zO-a9pr2vddJyjO2ya4WMU9ieyWbpliCS4J7H00ChXQ/edit?usp=sharing';
             var player_forms = [];
             var number_of_players = 7;
 
@@ -203,7 +203,7 @@
                 $('.player-receive-value').each((i, ele) => {
                     totalReceiveValue += parseFloat(ele.childNodes[1].innerText);
                 });
-                $('#trade-value-difference').html(createDifferenceDisplay((totalGiveValue - totalReceiveValue).toFixed(2)));
+                $('#trade-value-difference').html(createDifferenceDisplay((totalGiveValue - totalReceiveValue).toFixed(1)));
             });
 
 
