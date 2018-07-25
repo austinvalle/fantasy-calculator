@@ -153,6 +153,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
     <script>
         $(() => {
+            var recommendations = [];
             var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1zO-a9pr2vddJyjO2ya4WMU9ieyWbpliCS4J7H00ChXQ/edit?usp=sharing';
             var player_forms = [];
             var number_of_players = 7;
@@ -181,10 +182,32 @@
                     <div class="col-3 alert">
                         <strong>Trade Value Difference:</strong> ${valueDifference}%
                     </div>
-                    <div class="col-2 alert ${valueDifference > 0 ? 'alert-success' : 'alert-danger'}" style="${valueDifference == 0 ? 'display: none':''}">
-                        This is a ${valueDifference > 0 ? 'good' : 'bad'} trade!
+                    <div class="col-9 alert" style="${valueDifference == 0 ? 'display: none':''}">
+                        <strong>Recommendation:</strong> ${determineRecommendationText(valueDifference)}
                     </div>
                 `;
+            }
+
+            determineRecommendationText = (valueDifference) => {
+                if(valueDifference >= -999 && valueDifference <= -20) {
+                    return this.recommendations[0].Recommendation;
+                } else if(valueDifference > -20 && valueDifference <= -10) {
+                    return this.recommendations[1].Recommendation;
+                } else if(valueDifference > -10 && valueDifference <= -3) {
+                    return this.recommendations[2].Recommendation;
+                } else if(valueDifference > -3 && valueDifference < 3) {
+                    return this.recommendations[3].Recommendation;
+                } else if(valueDifference >= 3 && valueDifference < 10) {
+                    return this.recommendations[4].Recommendation;
+                } else if(valueDifference >= 10 && valueDifference < 20) {
+                    return this.recommendations[5].Recommendation;
+                } else if(valueDifference >= 20 && valueDifference <= 40) {
+                    return this.recommendations[6].Recommendation;
+                } else if(valueDifference > 40 && valueDifference <= 999) {
+                    return this.recommendations[7].Recommendation;
+                }
+                
+                return 'N/A';
             }
 
             for(var i=1; i <= number_of_players; i++) {
@@ -223,6 +246,8 @@
 
             sheetCallback = (data, tabletop) => {
                 data.Players.elements.shift();
+                data.Recommendations.elements.shift();
+                this.recommendations = data.Recommendations.elements;
                 $('input.typeahead').typeahead({
                     hint: true,
                     highlight: true,
