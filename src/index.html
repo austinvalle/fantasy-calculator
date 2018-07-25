@@ -152,6 +152,10 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
     <script>
         $(() => {
+            var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1zji_TVNozz6_fIgPd1qCmKL62mxEJXsdGUU3Tj3BPcE/edit?usp=sharing';
+            var player_forms = [];
+            var number_of_players = 7;
+
             createPlayerForm = (i) => {
                 return `
                         <div class="form-group row">
@@ -170,44 +174,48 @@
                         </div>
                     `;
             }
-            var player_forms = [];
-            for(var i=1; i <= 7; i++) {
+            for(var i=1; i <= number_of_players; i++) {
                 player_forms.push(createPlayerForm(i));
             }
             
             $('#calculator-form').append(player_forms.join('\n'));
-            var spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1zji_TVNozz6_fIgPd1qCmKL62mxEJXsdGUU3Tj3BPcE/edit?usp=sharing';
-            Tabletop.init({
-                key: spreadsheet_url,
-                callback: (data, tabletop) => {
-                    data.Players.elements.shift();
-                    $('input.typeahead').typeahead({
-                        hint: true,
-                        highlight: true,
-                        minLength: 1
-                    },
-                    {
-                        name: 'players',
-                        source: (query, cb) => {
-                            var matches, substringRegex;
-                            matches = [];
-                            substrRegex = new RegExp(query, 'i');
-                            $.each(data.Players.elements, function (i, player) {
-                                if (substrRegex.test(player.Name)) {
-                                    matches.push(player);
-                                }
-                            });
-                            cb(matches);
-                        },
-                        display: (player) => {
-                            return player.Name;
+            $('input.typeahead').on('typeahead:select', (ev, player) => {
+                console.log(JSON.stringify(player));
+            });
+
+            findPlayerName = (players) => {
+                return (query, cb) => {
+                    var matches, substringRegex;
+                    matches = [];
+                    substrRegex = new RegExp(query, 'i');
+                    $.each(players, function (i, player) {
+                        if (substrRegex.test(player.Name)) {
+                            matches.push(player);
                         }
                     });
-
-                    $('input.typeahead').on('typeahead:select', (ev, player) => {
-                        console.log(JSON.stringify(player));
-                    });
+                    cb(matches);
                 }
+            }
+
+            sheetCallback = (data, tabletop) => {
+                data.Players.elements.shift();
+                $('input.typeahead').typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    name: 'players',
+                    source: findPlayerName(data.Players.elements),
+                    display: (player) => {
+                        return player.Name;
+                    }
+                });
+            }
+
+            Tabletop.init({
+                key: spreadsheet_url,
+                callback: sheetCallback
             });
         });
     </script>
