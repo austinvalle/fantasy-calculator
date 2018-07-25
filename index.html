@@ -177,10 +177,14 @@
                     `;
             }
             
-            createDifferenceDisplay = (valueDifference) => {
+            createDifferenceDisplay = (totalGiveValue, totalReceiveValue) => {
+                if(totalGiveValue == 0) {
+                    return ``;
+                }
+                var valueDifference = (((totalGiveValue - totalReceiveValue) / totalGiveValue)*-100).toFixed(1);
                 return `
                     <div class="col-3 alert">
-                        <strong>Trade Value Difference:</strong> ${valueDifference}
+                        <strong>Trade Value Difference:</strong> ${valueDifference}%
                     </div>
                     <div class="col-9 alert" style="${valueDifference == 0 ? 'display: none':''}">
                         <strong>Recommendation:</strong> ${determineRecommendationText(valueDifference)}
@@ -189,7 +193,6 @@
             }
 
             determineRecommendationText = (valueDifference) => {
-                valueDifference = parseFloat(valueDifference)
                 var rec = this.recommendations.find(rec => {
                     return valueDifference >= parseFloat(rec.LowerRange) && valueDifference <= parseFloat(rec.UpperRange);
                 });
@@ -213,7 +216,7 @@
                 $('.player-receive-value').each((i, ele) => {
                     totalReceiveValue += parseFloat(ele.childNodes[1].innerText);
                 });
-                $('#trade-value-difference').html(createDifferenceDisplay((totalGiveValue - totalReceiveValue).toFixed(1)));
+                $('#trade-value-difference').html(createDifferenceDisplay(totalGiveValue, totalReceiveValue));
             });
 
 
