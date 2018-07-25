@@ -189,25 +189,12 @@
             }
 
             determineRecommendationText = (valueDifference) => {
-                if(valueDifference >= -999 && valueDifference <= -20) {
-                    return this.recommendations[0].Recommendation;
-                } else if(valueDifference > -20 && valueDifference <= -10) {
-                    return this.recommendations[1].Recommendation;
-                } else if(valueDifference > -10 && valueDifference <= -3) {
-                    return this.recommendations[2].Recommendation;
-                } else if(valueDifference > -3 && valueDifference < 3) {
-                    return this.recommendations[3].Recommendation;
-                } else if(valueDifference >= 3 && valueDifference < 10) {
-                    return this.recommendations[4].Recommendation;
-                } else if(valueDifference >= 10 && valueDifference < 20) {
-                    return this.recommendations[5].Recommendation;
-                } else if(valueDifference >= 20 && valueDifference <= 40) {
-                    return this.recommendations[6].Recommendation;
-                } else if(valueDifference > 40 && valueDifference <= 999) {
-                    return this.recommendations[7].Recommendation;
-                }
-                
-                return 'N/A';
+                valueDifference = parseFloat(valueDifference)
+                var rec = this.recommendations.find(rec => {
+                    return valueDifference >= parseFloat(rec.LowerRange) && valueDifference <= parseFloat(rec.UpperRange);
+                });
+
+                return rec ? rec.Recommendation : 'N/A';
             }
 
             for(var i=1; i <= number_of_players; i++) {
