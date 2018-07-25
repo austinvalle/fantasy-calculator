@@ -142,6 +142,7 @@
                 </form>
             </div>
         </div>
+        <div id="trade-value-difference" class="row justify-content-md-center" style="margin-top: 40px;"></div>
     </div>
     
 
@@ -174,6 +175,18 @@
                         </div>
                     `;
             }
+            
+            createDifferenceDisplay = (valueDifference) => {
+                return `
+                    <div class="col-3 alert">
+                        <strong>Trade Value Difference:</strong> ${valueDifference}%
+                    </div>
+                    <div class="col-2 alert ${valueDifference > 0 ? 'alert-success' : 'alert-danger'}" style="${valueDifference == 0 ? 'display: none':''}">
+                        This is a ${valueDifference > 0 ? 'good' : 'bad'} trade!
+                    </div>
+                `;
+            }
+
             for(var i=1; i <= number_of_players; i++) {
                 player_forms.push(createPlayerForm(i));
             }
@@ -181,7 +194,18 @@
             $('#calculator-form').append(player_forms.join('\n'));
             $('input.typeahead').on('typeahead:select', (ev, player) => {
                 ev.currentTarget.parentNode.parentNode.nextSibling.nextSibling.childNodes[1].textContent = player.Value;
+
+                var totalGiveValue = 0.0;
+                var totalReceiveValue = 0.0;
+                $('.player-give-value').each((i, ele) => {
+                    totalGiveValue += parseFloat(ele.childNodes[1].innerText);
+                });
+                $('.player-receive-value').each((i, ele) => {
+                    totalReceiveValue += parseFloat(ele.childNodes[1].innerText);
+                });
+                $('#trade-value-difference').html(createDifferenceDisplay((totalGiveValue - totalReceiveValue).toFixed(2)));
             });
+
 
             findPlayerName = (players) => {
                 return (query, cb) => {
