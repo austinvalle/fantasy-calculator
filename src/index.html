@@ -180,7 +180,7 @@
             
             $('#calculator-form').append(player_forms.join('\n'));
             $('input.typeahead').on('typeahead:select', (ev, player) => {
-                console.log(JSON.stringify(player));
+                ev.currentTarget.parentNode.parentNode.nextSibling.nextSibling.childNodes[1].textContent = player.Value;
             });
 
             findPlayerName = (players) => {
